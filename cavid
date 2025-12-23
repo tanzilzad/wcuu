@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h> // strcspn funksiyası üçün lazımdır
+
+int main() {
+    char metn[1000];
+    FILE *fayl;
+
+    // Faylı yazma rejimində açırıq
+    fayl = fopen("redaktor.txt", "w");
+
+    if (fayl == NULL) {
+        printf("Fayl yaradıla bilmədi!\n");
+        return 1;
+    }
+
+    printf("Mətninizi daxil edin:\n");
+
+    // Təhlükəsiz giriş: fgets həm ölçünü yoxlayır, həm də boşluqları qəbul edir
+    if (fgets(metn, sizeof(metn), stdin) != NULL) {
+        // Sondakı yeni sətir xarakterini (\n) silmək üçün (istəyə bağlı)
+        metn[strcspn(metn, "\n")] = 0;
+
+        // Mətni fayla yazırıq
+        fprintf(fayl, "%s", metn);
+    }
+
+    fclose(fayl);
+
+    printf("\nMəlumat 'redaktor.txt' faylına qeyd olundu.\n");
+
+    return 0;
+}
